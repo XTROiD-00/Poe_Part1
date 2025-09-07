@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Claim Stuff</title>
+    <style>
+        /* Dark contrast base */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #121212; /* very dark background */
+            color: #f1f1f1; /* light text */
+        }
+
+        /* Container styling */
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        /* Headings */
+        h1, h2, h3 {
+            color: #ffffff;
+        }
+
+        /* Links */
+        a {
+            color: #00bfff; /* bright blue */
+            text-decoration: none;
+        }
+
+            a:hover {
+                text-decoration: underline;
+                color: #1e90ff;
+            }
+
+        /* Buttons */
+        button {
+            background-color: #1e90ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px 0;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+            button:hover {
+                background-color: #00bfff;
+            }
+
+        /* Inputs */
+        input, select {
+            background-color: #1e1e1e;
+            color: #f1f1f1;
+            border: 1px solid #333;
+            padding: 8px;
+            border-radius: 4px;
+            width: 100%;
+            margin: 5px 0 15px 0;
+        }
+
+            input:focus, select:focus {
+                outline: none;
+                border-color: #1e90ff;
+            }
+
+        /* Card-style sections */
+        .card {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0px 2px 8px rgba(0,0,0,0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    @RenderSection("Scripts", required: false)
+
+
+</body>
+</html>

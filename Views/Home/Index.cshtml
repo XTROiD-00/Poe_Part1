@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<section>
+    <h3>User Registration & Login</h3>
+
+    <div class="button-container">
+        <button type="button" onclick="toggleForm('registerForm')">Register</button>
+        <button type="button" onclick="toggleForm('loginForm')">Login</button>
+    </div>
+
+    <form id="registerForm" class="user-form" style="display:none;">
+        <h4>User Registration</h4>
+
+        <div>
+            <label for="regName">Name:</label><br />
+            <input type="text" id="regName" name="Name" placeholder="Enter Name" required />
+        </div>
+
+        <div>
+            <label for="regSurname">Surname:</label><br />
+            <input type="text" id="regSurname" name="Surname" placeholder="Enter Surname" required />
+        </div>
+
+        <div>
+            <label for="regEmail">Email:</label><br />
+            <input type="email" id="regEmail" name="Email" placeholder="Enter Email" required />
+        </div>
+
+        <div>
+            <label for="regPassword">Password:</label><br />
+            <input type="password" id="regPassword" name="Password" placeholder="Enter Password" required />
+        </div>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <form id="loginForm" class="user-form" style="display:block;" onsubmit="return false;">
+        <h4>User Login</h4>
+
+        <div>
+            <label for="loginName">Name:</label><br />
+            <input type="text" id="loginName" name="Name" placeholder="Enter Name" required />
+        </div>
+
+        <div>
+            <label for="loginSurname">Surname:</label><br />
+            <input type="text" id="loginSurname" name="Surname" placeholder="Enter Surname" required />
+        </div>
+
+        <div>
+            <label for="loginEmail">Email:</label><br />
+            <input type="email" id="loginEmail" name="Email" placeholder="Enter Email" required />
+        </div>
+
+        <div>
+            <label for="loginPassword">Password:</label><br />
+            <input type="password" id="loginPassword" name="Password" placeholder="Enter Password" required />
+        </div>
+
+        <div class="button-container">
+            <button type="button" onclick="validateLogin('@Url.Action("Lecturer","Home")')">
+                Login as Lecturer
+            </button>
+            <button type="button" onclick="validateLogin('@Url.Action("Project_Manager","Home")')">
+                Login as Project Manager
+            </button>
+            <button type="button" onclick="validateLogin('@Url.Action("Program_coordinator","Home")')">
+                Login as Program Coordinator
+            </button>
+        </div>
+        <p id="loginMessage" style="color:red;"></p>
+    </form>
+</section>
+
+<script>
+    function toggleForm(formId) {
+        document.getElementById("registerForm").style.display = "none";
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById(formId).style.display = "block";
+    }
+
+    function validateLogin(redirectUrl) {
+        let name = document.getElementById("loginName").value.trim();
+        let surname = document.getElementById("loginSurname").value.trim();
+        let email = document.getElementById("loginEmail").value.trim();
+        let password = document.getElementById("loginPassword").value.trim();
+        let message = document.getElementById("loginMessage");
+
+        if (!name || !surname || !email || !password) {
+            message.textContent = "⚠ Please fill in all fields before continuing.";
+            return;
+        }
+
+        message.textContent = "";
+        window.location.href = redirectUrl;
+    }
+</script>
+
