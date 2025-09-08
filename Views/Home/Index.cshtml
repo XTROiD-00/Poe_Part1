@@ -10,7 +10,8 @@
         <button type="button" onclick="toggleForm('loginForm')">Login</button>
     </div>
 
-    <form id="registerForm" class="user-form" style="display:none;">
+    <!-- Registration Form (Default visible) -->
+    <form id="registerForm" class="user-form" style="display:block;" onsubmit="return handleRegister(event);">
         <h4>User Registration</h4>
 
         <div>
@@ -36,7 +37,8 @@
         <button type="submit">Register</button>
     </form>
 
-    <form id="loginForm" class="user-form" style="display:block;" onsubmit="return false;">
+    <!-- Login Form (Hidden by default) -->
+    <form id="loginForm" class="user-form" style="display:none;" onsubmit="return false;">
         <h4>User Login</h4>
 
         <div>
@@ -81,6 +83,28 @@
         document.getElementById(formId).style.display = "block";
     }
 
+    function handleRegister(event) {
+        event.preventDefault(); // stop real form submission
+
+        // Simple validation
+        let name = document.getElementById("regName").value.trim();
+        let surname = document.getElementById("regSurname").value.trim();
+        let email = document.getElementById("regEmail").value.trim();
+        let password = document.getElementById("regPassword").value.trim();
+
+        if (!name || !surname || !email || !password) {
+            alert("⚠ Please fill in all fields.");
+            return false;
+        }
+
+   
+
+        // Redirect to login form
+        toggleForm('loginForm');
+
+        return false;
+    }
+
     function validateLogin(redirectUrl) {
         let name = document.getElementById("loginName").value.trim();
         let surname = document.getElementById("loginSurname").value.trim();
@@ -97,4 +121,3 @@
         window.location.href = redirectUrl;
     }
 </script>
-

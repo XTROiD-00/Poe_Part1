@@ -43,7 +43,7 @@ namespace Poe_Part1.Controllers
         {
             return View(); // This will look for Views/Home/Lecturer.cshtml
         }
-        public IActionResult TrackClaim()
+        public IActionResult Track_Claim()
         {
             return View(); // This will look for Views/Home/Lecturer.cshtml
         }
@@ -51,7 +51,7 @@ namespace Poe_Part1.Controllers
         {
             return View(); // This will look for Views/Home/Lecturer.cshtml
         }
-        public IActionResult Approve()
+        public IActionResult ApproveClaimIndex()
         {
             return View(); // This will look for Views/Home/Lecturer.cshtml
         }

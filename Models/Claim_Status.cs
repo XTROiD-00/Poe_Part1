@@ -1,11 +1,18 @@
-﻿namespace Poe_Part1.Models
+﻿using System;
+
+namespace Poe_Part1.Models
 {
-    public enum Claim_Status
+    public class PreApproveClaim
     {
-        Pending = 0,
-        ApprovedByCoordinator = 1,
-        RejectedByCoordinator = 2,
-        ApprovedByManager = 3,
-        RejectedByManager = 4
+        public int Id { get; set; }
+        public string Module { get; set; }
+        public int Hours { get; set; }
+        public decimal Rate { get; set; }
+        public string Status { get; set; }
+        public DateTime SubmittedDate { get; set; }
+        public DateTime SubmittedTime { get; set; }
+        public DateTime? PreApprovedDate { get; set; }
+        public DateTime? PreApprovedTime { get; set; }
+        public string Document { get; set; }
     }
 }

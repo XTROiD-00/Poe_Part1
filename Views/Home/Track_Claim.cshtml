@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Track Claim";
+}
+@Html.Partial("_Menu")
+
+<div class="container">
+    <div class="card p-4">
+        <h1 class="lecturer-header">My Claims</h1>
+
+        <table class="table claims-table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Claim ID</th>
+                    <th>Hours</th>
+                    <th>Rate</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>001</td>
+                    <td>12</td>
+                    <td>R300</td>
+                    <td>Pending</td>
+                </tr>
+                <tr>
+                    <td>002</td>
+                    <td>15</td>
+                    <td>R350</td>
+                    <td>Approved</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a class="btn btn-secondary btn-lg" asp-controller="Lecturer" asp-action="Index">← Back</a>
+    </div>
+</div>
