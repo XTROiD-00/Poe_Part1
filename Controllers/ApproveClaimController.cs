@@ -5,36 +5,56 @@ using System.Collections.Generic;
 
 namespace Poe_Part1.Controllers
 {
-    public class ClaimsController : Controller
+    public class ApproveClaimController : Controller
     {
-        // Mock Data (replace with DB context later)
+        private static List<ApproveClaim> claims = new List<ApproveClaim>
+        {
+            new ApproveClaim
+            {
+                ClaimId = 1,
+                ModuleId = "502",
+                Sessions = 3,
+                Hours = 15,
+                Rate = 150,
+                Status = "Pending",
+                SubmittedDate = DateTime.Parse("2025-09-01"),
+                SubmittedTime = "08:15",
+                Document = "claim1.pdf"
+            },
+            new ApproveClaim
+            {
+                ClaimId = 2,
+                ModuleId = "582",
+                Sessions = 2,
+                Hours = 12,
+                Rate = 200,
+                Status = "Pre-approved",
+                SubmittedDate = DateTime.Parse("2025-09-02"),
+                SubmittedTime = "10:00",
+                PreApprovedDate = DateTime.Parse("2025-09-03"),
+                PreApprovedTime = "09:45",
+                Document = "claim2.pdf"
+            },
+            new ApproveClaim
+            {
+                ClaimId = 3,
+                ModuleId = "590",
+                Sessions = 5,
+                Hours = 20,
+                Rate = 180,
+                Status = "Approved",
+                SubmittedDate = DateTime.Parse("2025-09-05"),
+                SubmittedTime = "11:30",
+                PreApprovedDate = DateTime.Parse("2025-09-06"),
+                PreApprovedTime = "14:10",
+                FinalizedDate = DateTime.Parse("2025-09-07"),
+                Document = "claim3.pdf"
+            }
+        };
+
         public IActionResult Index()
         {
-            var claims = new List<Claim>
-            {
-                new Claim { ClaimId = 101, ModuleId = 501, Sessions = 15, Hours = 150, Rate = 15, TotalAmount = 2250,
-                    Status = "Pre-approved", SubmittedDate = new DateTime(2025, 9, 1), SubmittedTime="08:15",
-                    PreApprovedDate = new DateTime(2025, 9, 2), PreApprovedTime="10:00", FinalizedDate = null, Document="claim1.pdf" },
-
-                new Claim { ClaimId = 102, ModuleId = 502, Sessions = 12, Hours = 120, Rate = 20, TotalAmount = 2400,
-                    Status = "Approved", SubmittedDate = new DateTime(2025, 9, 2), SubmittedTime="09:10",
-                    PreApprovedDate = new DateTime(2025, 9, 3), PreApprovedTime="12:00", FinalizedDate = new DateTime(2025, 9, 5),
-                    Document="claim2.pdf" }
-            };
-
             return View(claims);
-        }
-
-        public IActionResult Preview(int id)
-        {
-            // Fetch claim details by id
-            return Content($"Preview Claim {id}");
-        }
-
-        public IActionResult Reject(int id)
-        {
-            // Logic for rejecting claim
-            return Content($"Rejected Claim {id}");
         }
     }
 }

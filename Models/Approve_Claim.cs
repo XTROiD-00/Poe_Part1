@@ -1,15 +1,13 @@
-﻿using System;
-
-namespace Poe_Part1.Models
+﻿namespace Poe_Part1.Models
 {
-    public class Claim
+    public class ApproveClaim
     {
         public int ClaimId { get; set; }
-        public int ModuleId { get; set; }
+        public string ModuleId { get; set; }
         public int Sessions { get; set; }
         public int Hours { get; set; }
         public decimal Rate { get; set; }
-        public decimal TotalAmount { get; set; }
+        public decimal TotalAmount => Hours * Rate;
         public string Status { get; set; }
         public DateTime SubmittedDate { get; set; }
         public string SubmittedTime { get; set; }
@@ -19,4 +17,3 @@ namespace Poe_Part1.Models
         public string Document { get; set; }
     }
 }
-
