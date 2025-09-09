@@ -1,20 +1,48 @@
 ﻿@{
-    ViewData["Title"] = " Programe_coordinator ";
+    ViewData["Title"] = "Program Coordinator";
 }
 
 @Html.Partial("_Sum")
 
-<h1>Welcome 🎓</h1>
-<p>
-    This platform streamlines the process of submitting and managing monthly claims. Lecturers can easily upload supporting documents, complete structured forms, and track the status of their claims from submission to final approval. Built-in validation and mandatory fields ensure the process is accurate, consistent, and reliable.
-</p>
-<div>
-    <p>
-        Once submitted, claims are initially checked by the Program Coordinator for verification. They are then forwarded to the Program Manager, who makes the final decision to approve or reject the claim. Every user signs in and performs tasks based on their assigned role.
+<section class="coordinator-home">
 
-    </p>
-</div>
-<hr />
+    <!-- Welcome Card -->
+    <div class="card welcome-card">
+        <h1 class="coordinator-title">Welcome 🎓</h1>
+        <p class="coordinator-intro">
+            This platform streamlines the process of submitting and managing monthly claims.
+            Lecturers submit claims, and as a Program Coordinator, you verify documents, ensure forms are complete,
+            and confirm compliance before forwarding claims to the Program Manager.
+            Built-in validation and mandatory fields make your workflow efficient and reliable.
+        </p>
+    </div>
 
+    <!-- Verification Workflow Card -->
+    <div class="card workflow-card">
+        <h2 class="workflow-title">Coordinator Workflow Overview</h2>
+        <div class="workflow-steps">
+            <div class="step">
+                <div class="step-icon">📝</div>
+                <div class="step-text">
+                    <h3>Receive Claims</h3>
+                    <p>Review submitted claims from lecturers for completeness and accuracy.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-icon">🔍</div>
+                <div class="step-text">
+                    <h3>Verify Documents</h3>
+                    <p>Ensure all supporting files and mandatory fields are properly completed.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-icon">➡️</div>
+                <div class="step-text">
+                    <h3>Forward to Manager</h3>
+                    <p>After verification, forward claims to the Program Manager for final approval.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-
+</section>

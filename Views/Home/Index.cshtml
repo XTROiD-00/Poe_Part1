@@ -2,8 +2,11 @@
     ViewData["Title"] = "Home Page";
 }
 
-<section>
-    <h3>Welcome Please Enter Your Registration details Or log in You already have an account</h3> 
+<section class="auth-section">
+    <h2 class="auth-title">Welcome</h2>
+    <p class="auth-subtitle">
+        Please enter your registration details or log in if you already have an account.
+    </p>
 
     <div class="button-container">
         <button type="button" onclick="toggleForm('registerForm')">Register</button>
@@ -11,68 +14,47 @@
     </div>
 
     <!-- Registration Form (Default visible) -->
-    <form id="registerForm" class="user-form" style="display:block;" onsubmit="return handleRegister(event);">
-        <h4>User Registration</h4>
+    <form id="registerForm" class="user-form card" style="display:block;" onsubmit="return handleRegister(event);">
+        <h3>User Registration</h3>
 
-        <div>
-            <label for="regName">Name:</label><br />
-            <input type="text" id="regName" name="Name" placeholder="Enter Name" required />
-        </div>
+        <label for="regName">Name:</label>
+        <input type="text" id="regName" name="Name" placeholder="Enter Name" required />
 
-        <div>
-            <label for="regSurname">Surname:</label><br />
-            <input type="text" id="regSurname" name="Surname" placeholder="Enter Surname" required />
-        </div>
+        <label for="regSurname">Surname:</label>
+        <input type="text" id="regSurname" name="Surname" placeholder="Enter Surname" required />
 
-        <div>
-            <label for="regEmail">Email:</label><br />
-            <input type="email" id="regEmail" name="Email" placeholder="Enter Email" required />
-        </div>
+        <label for="regEmail">Email:</label>
+        <input type="email" id="regEmail" name="Email" placeholder="Enter Email" required />
 
-        <div>
-            <label for="regPassword">Password:</label><br />
-            <input type="password" id="regPassword" name="Password" placeholder="Enter Password" required />
-        </div>
+        <label for="regPassword">Password:</label>
+        <input type="password" id="regPassword" name="Password" placeholder="Enter Password" required />
 
-        <button type="submit">Register</button>
+        <button type="submit" class="btn-primary">Register</button>
     </form>
 
     <!-- Login Form (Hidden by default) -->
-    <form id="loginForm" class="user-form" style="display:none;" onsubmit="return false;">
-        <h4>User Login</h4>
+    <form id="loginForm" class="user-form card" style="display:none;">
+        <h3>User Login</h3>
 
-        <div>
-            <label for="loginName">Name:</label><br />
-            <input type="text" id="loginName" name="Name" placeholder="Enter Name" required />
+        <label for="loginName">Name:</label>
+        <input type="text" id="loginName" name="Name" placeholder="Enter Name" required />
+
+        <label for="loginSurname">Surname:</label>
+        <input type="text" id="loginSurname" name="Surname" placeholder="Enter Surname" required />
+
+        <label for="loginEmail">Email:</label>
+        <input type="email" id="loginEmail" name="Email" placeholder="Enter Email" required />
+
+        <label for="loginPassword">Password:</label>
+        <input type="password" id="loginPassword" name="Password" placeholder="Enter Password" required />
+
+        <div class="button-container vertical">
+            <button type="button" onclick="validateLogin('@Url.Action("Lecturer","Home")')">Login as Lecturer</button>
+            <button type="button" onclick="validateLogin('@Url.Action("Project_Manager","Home")')">Login as Project Manager</button>
+            <button type="button" onclick="validateLogin('@Url.Action("Program_coordinator","Home")')">Login as Program Coordinator</button>
         </div>
 
-        <div>
-            <label for="loginSurname">Surname:</label><br />
-            <input type="text" id="loginSurname" name="Surname" placeholder="Enter Surname" required />
-        </div>
-
-        <div>
-            <label for="loginEmail">Email:</label><br />
-            <input type="email" id="loginEmail" name="Email" placeholder="Enter Email" required />
-        </div>
-
-        <div>
-            <label for="loginPassword">Password:</label><br />
-            <input type="password" id="loginPassword" name="Password" placeholder="Enter Password" required />
-        </div>
-
-        <div class="button-container">
-            <button type="button" onclick="validateLogin('@Url.Action("Lecturer","Home")')">
-                Login as Lecturer
-            </button>
-            <button type="button" onclick="validateLogin('@Url.Action("Project_Manager","Home")')">
-                Login as Project Manager
-            </button>
-            <button type="button" onclick="validateLogin('@Url.Action("Program_coordinator","Home")')">
-                Login as Program Coordinator
-            </button>
-        </div>
-        <p id="loginMessage" style="color:red;"></p>
+        <p id="loginMessage" class="error-message"></p>
     </form>
 </section>
 
@@ -84,9 +66,7 @@
     }
 
     function handleRegister(event) {
-        event.preventDefault(); // stop real form submission
-
-        // Simple validation
+        event.preventDefault();
         let name = document.getElementById("regName").value.trim();
         let surname = document.getElementById("regSurname").value.trim();
         let email = document.getElementById("regEmail").value.trim();
@@ -97,11 +77,7 @@
             return false;
         }
 
-   
-
-        // Redirect to login form
         toggleForm('loginForm');
-
         return false;
     }
 

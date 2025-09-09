@@ -1,18 +1,48 @@
 ﻿@{
-    ViewData["Title"] = " Project_Manager ";
+    ViewData["Title"] = "Project Manager";
 }
 
 @Html.Partial("_Sum")
 
-<h1>Welcome 🎓</h1>
-<p>
-    This platform streamlines the process of submitting and managing monthly claims. Lecturers can easily upload supporting documents, complete structured forms, and track the status of their claims from submission to final approval. Built-in validation and mandatory fields ensure the process is accurate, consistent, and reliable.
-</p>
-<div>
-    <p>
-        Once submitted, claims are initially checked by the Program Coordinator for verification. They are then forwarded to the Program Manager, who makes the final decision to approve or reject the claim. Every user signs in and performs tasks based on their assigned role.
+<section class="manager-home">
 
-    </p>
-</div>
-<hr />
+    <!-- Welcome Card -->
+    <div class="card welcome-card">
+        <h1 class="manager-title">Welcome 🎓</h1>
+        <p class="manager-intro">
+            This platform streamlines the process of submitting and managing monthly claims.
+            Lecturers submit claims, Program Coordinators verify them, and as a Project Manager,
+            you have the final responsibility to approve or reject claims.
+            Built-in validation ensures the process is reliable, accurate, and well-documented.
+        </p>
+    </div>
 
+    <!-- Approval Workflow Card -->
+    <div class="card workflow-card">
+        <h2 class="workflow-title">Manager Approval Workflow</h2>
+        <div class="workflow-steps">
+            <div class="step">
+                <div class="step-icon">📥</div>
+                <div class="step-text">
+                    <h3>Receive Verified Claims</h3>
+                    <p>Review claims after verification by the Program Coordinator.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-icon">🧐</div>
+                <div class="step-text">
+                    <h3>Evaluate Claims</h3>
+                    <p>Check supporting documents, compliance, and completeness.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-icon">✅</div>
+                <div class="step-text">
+                    <h3>Approve or Reject</h3>
+                    <p>Make the final decision and update the claim status for the Lecturer.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
