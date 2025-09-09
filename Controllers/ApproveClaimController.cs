@@ -52,7 +52,7 @@ namespace Poe_Part1.Controllers
             }
         };
 
-        public IActionResult Index()
+        public IActionResult ApproveClaimIndex()
         {
             return View(claims);
         }

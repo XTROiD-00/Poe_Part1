@@ -1,4 +1,4 @@
-﻿@model IEnumerable<dynamic>
+﻿@model IEnumerable<Poe_Part1.Models.ApproveClaim>
 
 <table class="table table-bordered table-striped">
     <thead>
@@ -22,7 +22,9 @@
     <tbody>
         @if (Model == null || !Model.Any())
         {
-           
+            <tr>
+                <td colspan="14" class="text-center text-muted">No claims available</td>
+            </tr>
         }
         else
         {

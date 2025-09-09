@@ -1,20 +1,7 @@
-﻿@{
+﻿﻿@{
     ViewData["Title"] = "ApproveClaimIndex";
 
-    var pendingClaims = new List<dynamic>
-    {
-        // ... your claims data here ...
-    };
 
-    var preApprovedClaims = new List<dynamic>
-    {
-        // ... your pre-approved claims data here ...
-    };
-
-    var approvedClaims = new List<dynamic>
-    {
-        // ... your approved claims data here ...
-    };
 }
 
 @Html.Partial("_Sum")
@@ -22,10 +9,10 @@
 <h2>Approve Dashboard</h2>
 
 <h3>Pending Claims</h3>
-@await Html.PartialAsync("_ClaimTablePartial", pendingClaims)
+@await Html.PartialAsync("_ClaimTablePartial")
 
 <h3>Pre-approved Claims</h3>
-@await Html.PartialAsync("_ClaimTablePartial", preApprovedClaims)
+@await Html.PartialAsync("_ClaimTablePartial")
 
 <h3>Approved Claims</h3>
-@await Html.PartialAsync("_ClaimTablePartial", approvedClaims)
+@await Html.PartialAsync("_ClaimTablePartial")
