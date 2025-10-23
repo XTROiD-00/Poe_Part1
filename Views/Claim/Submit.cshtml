@@ -1,0 +1,54 @@
+﻿@model Poe_Part1.Models.Claim
+
+@{
+    ViewData["Title"] = "Submit Claim";
+}
+
+@Html.Partial("_Menu")
+
+
+<h1>Submit Your Claim</h1>
+
+<form asp-action="Submit" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="FacultyName"></label>
+        <input asp-for="FacultyName" class="form-control" />
+        <span asp-validation-for="FacultyName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ModuleName"></label>
+        <input asp-for="ModuleName" class="form-control" />
+        <span asp-validation-for="ModuleName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Sessions"></label>
+        <input asp-for="Sessions" class="form-control" />
+        <span asp-validation-for="Sessions" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Hours"></label>
+        <input asp-for="Hours" class="form-control" />
+        <span asp-validation-for="Hours" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Rate"></label>
+        <input asp-for="Rate" class="form-control" />
+        <span asp-validation-for="Rate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Upload Supporting Document (pdf/docx/xlsx, max 5MB)</label>
+        <input type="file" name="Document" class="form-control" accept=".pdf,.docx,.xlsx" />
+    </div>
+
+  
+    <a href="@Url.Action("Success", "Claim")">Submit Claim</a>
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

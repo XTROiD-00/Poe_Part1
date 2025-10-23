@@ -1,36 +1,54 @@
-﻿@{
-    ViewData["Title"] = "Track Claim";
+﻿@model IEnumerable<Poe_Part1.Models.Claim>
+
+@{
+    ViewData["Title"] = "Track Claims";
 }
-@Html.Partial("_Menu")
 
-<div class="container">
-    <div class="card p-4">
-        <h1 class="lecturer-header">My Claims</h1>
+<h1>My Claims</h1>
 
-        <table class="table claims-table table-bordered table-hover">
-            <thead>
+@if (Model != null && Model.Any())
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Claim ID</th>
+                <th>Faculty Name</th>
+                <th>Module Name</th>
+                <th>Sessions</th>
+                <th>Hours</th>
+                <th>Rate</th>
+                <th>Total Amount</th>
+                <th>Status</th>
+                <th>Document</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model)
+            {
                 <tr>
-                    <th>Claim ID</th>
-                    <th>Hours</th>
-                    <th>Rate</th>
-                    <th>Status</th>
+                    <td>@claim.ClaimId</td>
+                    <td>@claim.FacultyName</td>
+                    <td>@claim.ModuleName</td>
+                    <td>@claim.Sessions</td>
+                    <td>@claim.Hours</td>
+                    <td>@claim.Rate</td>
+                    <td>@claim.TotalAmount</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(claim.DocumentPath))
+                        {
+                            <a href="@claim.DocumentPath" target="_blank">View Document</a>
+                        }
+                        else
+                        {
+                            <span>No document</span>
+                        }
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>001</td>
-                    <td>12</td>
-                    <td>R300</td>
-                    <td>Pending</td>
-                </tr>
-                <tr>
-                    <td>002</td>
-                    <td>15</td>
-                    <td>R350</td>
-                    <td>Approved</td>
-                </tr>
-            </tbody>
-        </table>
-
-    </div>
-</div>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No claims found.</p>
+}

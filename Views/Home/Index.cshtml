@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Poe_Part1.Models.Register
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -10,27 +12,30 @@
 
     <div class="button-container">
         <button type="button" onclick="toggleForm('registerForm')">Register</button>
-        <button type="button" onclick="toggleForm('loginForm')">Login</button>
     </div>
 
     <!-- Registration Form (Default visible) -->
-    <form id="registerForm" class="user-form card" style="display:block;" onsubmit="return handleRegister(event);">
+    <form id="registerForm" class="user-form card" asp-action="Index" method="post" style="display:block;">
         <h3>User Registration</h3>
 
-        <label for="regName">Name:</label>
-        <input type="text" id="regName" name="Name" placeholder="Enter Name" required />
+        <label asp-for="name">Name:</label>
+        <input type="text" asp-for="name" placeholder="Enter name" />
+        <span asp-validation-for="name" class="text-danger"></span>
 
-        <label for="regSurname">Surname:</label>
-        <input type="text" id="regSurname" name="Surname" placeholder="Enter Surname" required />
+        <label asp-for="surname">Surname:</label>
+        <input type="text" asp-for="surname" placeholder="Enter surname" />
+        <span asp-validation-for="surname" class="text-danger"></span>
 
-        <label for="regEmail">Email:</label>
-        <input type="email" id="regEmail" name="Email" placeholder="Enter Email" required />
+        <label asp-for="email">Email:</label>
+        <input type="email" asp-for="email" placeholder="Enter email" />
+        <span asp-validation-for="email" class="text-danger"></span>
 
-        <label for="regPassword">Password:</label>
-        <input type="password" id="regPassword" name="Password" placeholder="Enter Password" required />
+        <label asp-for="password">Password:</label>
+        <input type="password" asp-for="password" placeholder="Enter password" />
+        <span asp-validation-for="password" class="text-danger"></span>
 
         <button type="submit" class="btn-primary">Register</button>
-    </form>
+    </form> 
 
     <!-- Login Form (Hidden by default) -->
     <form id="loginForm" class="user-form card" style="display:none;">
@@ -49,36 +54,27 @@
         <input type="password" id="loginPassword" name="Password" placeholder="Enter Password" required />
 
         <div class="button-container vertical">
-            <button type="button" onclick="validateLogin('@Url.Action("Lecturer","Home")')">Login as Lecturer</button>
-            <button type="button" onclick="validateLogin('@Url.Action("Project_Manager","Home")')">Login as Project Manager</button>
-            <button type="button" onclick="validateLogin('@Url.Action("Program_coordinator","Home")')">Login as Program Coordinator</button>
+            <button type="button" onclick="validateLogin('@Url.Action("Lecturer", "Home")')">Login as Lecturer</button>
+            <button type="button" onclick="validateLogin('@Url.Action("Project_Manager", "Home")')">Login as Project Manager</button>
+            <button type="button" onclick="validateLogin('@Url.Action("Program_coordinator", "Home")')">Login as Program Coordinator</button>
         </div>
 
         <p id="loginMessage" class="error-message"></p>
     </form>
 </section>
 
+<!-- Validation Scripts -->
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+
+<a href="@Url.Action("Privacy", "Home")">Login here</a>
+
 <script>
     function toggleForm(formId) {
         document.getElementById("registerForm").style.display = "none";
         document.getElementById("loginForm").style.display = "none";
         document.getElementById(formId).style.display = "block";
-    }
-
-    function handleRegister(event) {
-        event.preventDefault();
-        let name = document.getElementById("regName").value.trim();
-        let surname = document.getElementById("regSurname").value.trim();
-        let email = document.getElementById("regEmail").value.trim();
-        let password = document.getElementById("regPassword").value.trim();
-
-        if (!name || !surname || !email || !password) {
-            alert("⚠ Please fill in all fields.");
-            return false;
-        }
-
-        toggleForm('loginForm');
-        return false;
     }
 
     function validateLogin(redirectUrl) {
