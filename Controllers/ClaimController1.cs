@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Poe_Part1.Data;
 using Poe_Part1.Models;
+using System.Linq;
 
 namespace Poe_Part1.Controllers
 {
@@ -9,19 +10,20 @@ namespace Poe_Part1.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+        // Constructor to inject the ApplicationDbContext
         public ClaimController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET action for submitting claim
+        // GET action for submitting a claim
         [HttpGet]
         public IActionResult Submit()
         {
             return View();
         }
 
-        // POST action for submitting claim
+        // POST action for submitting a claim
         [HttpPost]
         public IActionResult Submit(Claim claim)
         {
@@ -33,18 +35,21 @@ namespace Poe_Part1.Controllers
                     var file = Request.Form.Files[0];
                     var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
 
+                    // Ensure the uploads folder exists
                     if (!Directory.Exists(uploadsFolder))
                         Directory.CreateDirectory(uploadsFolder);
 
                     var filePath = Path.Combine(uploadsFolder, file.FileName);
 
+                    // Save the file to the uploads folder
                     using (var stream = new FileStream(filePath, FileMode.Create))
                         file.CopyTo(stream);
 
+                    // Store the file path in the claim
                     claim.DocumentPath = "/uploads/" + file.FileName;
                 }
 
-                // Add claim to the database
+                // Add the claim to the database
                 _context.Claims.Add(claim);
                 _context.SaveChanges();
                 return RedirectToAction("Success");
@@ -54,18 +59,18 @@ namespace Poe_Part1.Controllers
             return View(claim);
         }
 
-        // Success action to show a confirmation message
+        // Action to show success message
         public IActionResult Success()
         {
-            return View(); // Create Success.cshtml with a success message
+            return View();  // Create a Success.cshtml with a success message
         }
 
         // GET action for tracking claims
         [HttpGet]
         public IActionResult Track_Claim()
         {
-            var claims = _context.Claims.ToList(); // Get all claims from database
-            return View(claims); // Pass claims data to view
+            var claims = _context.Claims.ToList();  // Fetch all claims from the database
+            return View(claims);  // Pass the claims data to the view
         }
     }
 }
