@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Rename this controller to avoid duplicate class name in the same namespace
+using Microsoft.AspNetCore.Mvc;
 using Poe_Part1.Models;
 using System.IO;
 
 namespace Poe_Part1.Controllers
 {
-    public class ClaimController : Controller
+    public class ClaimController1 : Controller // Renamed from ClaimController to ClaimController1
     {
         // Create an instance of ClaimsQueries for interacting with the database
         private readonly ClaimsQueries _claimsDb;
 
-        public ClaimController()
+        public ClaimController1()
         {
             _claimsDb = new ClaimsQueries(); // Instantiate ClaimsQueries here
         }
@@ -30,19 +31,17 @@ namespace Poe_Part1.Controllers
 
             Console.WriteLine(claim.FacultyName);
 
-            Console.WriteLine(claim.ModuleName );
+            Console.WriteLine(claim.ModuleName);
 
-            Console.WriteLine(claim.Sessions );
+            Console.WriteLine(claim.Sessions);
 
-            Console.WriteLine(claim.Hours );    
+            Console.WriteLine(claim.Hours);
 
-            Console.WriteLine(claim.Rate );
+            Console.WriteLine(claim.Rate);
 
-            Console.WriteLine(claim.TotalAmount );
+            Console.WriteLine(claim.TotalAmount);
 
-            Console.WriteLine(claim.DocumentPath );
-
-
+            Console.WriteLine(claim.DocumentPath);
 
             if (!ModelState.IsValid)
             {

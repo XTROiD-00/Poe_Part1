@@ -1,4 +1,4 @@
-﻿@model IEnumerable<POE_MVC_Part_1.Models.Claims>
+﻿@model IEnumerable<Poe_Part1.Models.Claim>
 @{
     ViewData["Title"] = "My Claims";
     var role = ViewBag.Role?.ToString(); // Read role from controller
@@ -30,10 +30,10 @@
             {
                 <tr>
                     <td>@claim.month</td>
-                    <td>@claim.hours</td>
-                    <td>@claim.rate</td>
+                    <td>@claim.Hours</td>
+                    <td>@claim.Rate</td>
                     <td>@claim.totalAmount</td>
-                    <td>@claim.status</td>
+                    <td>@claim.Status</td>
                     <td>
                         <a href="~/uploads/@claim.documentName" target="_blank">View Document</a>
                     </td>
@@ -43,7 +43,7 @@
                         {
                             <a asp-action="Details" asp-route-id="@claim.ClaimId" class="btn btn-sm btn-info">View</a>
 
-                            @if (claim.status != "Approved" && claim.status != "Rejected")
+                            @if (claim.Status != "Approved" && claim.Status != "Rejected")
                             {
                                 <a asp-action="Edit" asp-route-id="@claim.ClaimId" class="btn btn-sm btn-warning">Edit</a>
                             }
@@ -53,7 +53,7 @@
                         {
                             <a asp-action="Details" asp-route-id="@claim.ClaimId" class="btn btn-sm btn-info">View</a>
 
-                            @if (claim.status == "Pending")
+                            @if (claim.Status == "Pending")
                             {
                                 <a asp-action="PreApprove" asp-route-id="@claim.ClaimId" class="btn btn-sm btn-success">Pre-Approve</a>
                                 <a asp-action="Reject" asp-route-id="@claim.ClaimId" class="btn btn-sm btn-danger">Reject</a>
@@ -64,7 +64,7 @@
                         {
                             <a asp-action="Details" asp-route-id="@claim.ClaimId" class="btn btn-sm btn-info">View</a>
 
-                            @if (claim.status == "Pre-Approved")
+                            @if (claim.Status == "Pre-Approved")
                             {
                                 <a asp-action="Approve" asp-route-id="@claim.ClaimId" class="btn btn-sm btn-success">Approve</a>
                                 <a asp-action="Reject" asp-route-id="@claim.ClaimId" class="btn btn-sm btn-danger">Reject</a>

@@ -1,54 +1,172 @@
-﻿@model IEnumerable<Poe_Part1.Models.Claim>
-
-@{
-    ViewData["Title"] = "Track Claims";
+﻿@{
+    ViewData["Title"] = "Track_Claim";
 }
 
-<h1>My Claims</h1>
+<h2>  Claims</h2>
 
-@if (Model != null && Model.Any())
-{
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>Claim ID</th>
-                <th>Faculty Name</th>
-                <th>Module Name</th>
-                <th>Sessions</th>
-                <th>Hours</th>
-                <th>Rate</th>
-                <th>Total Amount</th>
-                <th>Status</th>
-                <th>Document</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var claim in Model)
+<!-- Dynamic Table (from Model) -->
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Module</th>
+            <th>Hours</th>
+            <th>Rate</th>
+            <th>Status</th>
+            <th>Submitted Date</th>
+            <th>Submitted Time</th>
+            <th>Pre-Approved Date</th>
+            <th>Document</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var claim in Model)
             {
                 <tr>
-                    <td>@claim.ClaimId</td>
-                    <td>@claim.FacultyName</td>
-                    <td>@claim.ModuleName</td>
-                    <td>@claim.Sessions</td>
+                    <td>@claim.Module</td>
                     <td>@claim.Hours</td>
                     <td>@claim.Rate</td>
-                    <td>@claim.TotalAmount</td>
+                    <td>@claim.Status</td>
+                    <td>@claim.SubmittedDate.ToShortDateString()</td>
+                    <td>@claim.SubmittedTime.ToShortTimeString()</td>
+                    <td>@(claim.PreApprovedDate.HasValue? claim.PreApprovedDate.Value.ToShortDateString() : "-")</td>
                     <td>
-                        @if (!string.IsNullOrEmpty(claim.DocumentPath))
-                        {
-                            <a href="@claim.DocumentPath" target="_blank">View Document</a>
-                        }
-                        else
-                        {
-                            <span>No document</span>
-                        }
+                        <a href="/uploads/@claim.Document" target="_blank">@claim.Document</a>
+                    </td>
+                    <td>
+                        <!-- Approve Button -->
+                        <form asp-action="PreApprove" asp-controller="PreApprove" method="post" style="display:inline">
+                            <input type="hidden" name="id" value="@claim.Id" />
+                            <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                        </form>
+                        <!-- Reject Button -->
+                        <form asp-action="Reject" asp-controller="PreApprove" method="post" style="display:inline">
+                            <input type="hidden" name="id" value="@claim.Id" />
+                            <button4 type="submit" class="btn btn-danger btn-sm">Reject</button4>
+                        </form>
                     </td>
                 </tr>
             }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No claims found.</p>
-}
+        }
+    </tbody>
+</table>
+
+<!-- Static Transactions Table -->
+<h2>All Transactions</h2>
+<table class="table claims-table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Claim ID</th>
+            <th>Hours</th>
+            <th>Rate</th>
+            <th>Status</th>
+            <th>Submitted Date</th>
+            <th>Pre Approved Date</th>
+            <th>Finalized Date</th>
+            <th>Document</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>001</td>
+            <td>12</td>
+            <td>R300</td>
+            <td>Pending</td>
+            <td>2025-01-03</td>
+            <td>2025-01-04</td>
+            <td>2025-01-09</td>
+            <td>claim2.pdf</td>
+            <td>
+                <button class="btn btn-success btn-sm">Approve</button>
+                <button class="btn btn-danger btn-sm">Reject</button>
+            </td>
+        </tr>
+        <tr>
+            <td>002</td>
+            <td>15</td>
+            <td>R350</td>
+            <td>Approved</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>claim3.pdf</td>
+            <td>
+                <button class="btn btn-success btn-sm">Approve</button>
+                <button class="btn btn-danger btn-sm">Reject</button>
+            </td>
+        </tr>
+        <tr>
+            <td>003</td>
+            <td>16</td>
+            <td>R351</td>
+            <td>Approved</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>claim4.pdf</td>
+            <td>
+                <button class="btn btn-success btn-sm">Approve</button>
+                <button class="btn btn-danger btn-sm">Reject</button>
+            </td>
+        </tr>
+        <tr>
+            <td>004</td>
+            <td>505</td>
+            <td>R125</td>
+            <td>Rejected</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>claim5.pdf</td>
+            <td>
+                <button class="btn btn-success btn-sm">Approve</button>
+                <button class="btn btn-danger btn-sm">Reject</button>
+            </td>
+        </tr>
+        <tr>
+            <td>005</td>
+            <td>506</td>
+            <td>R980</td>
+            <td>Approved</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>claim6.pdf</td>
+            <td>
+                <button class="btn btn-success btn-sm">Approve</button>
+                <button class="btn btn-danger btn-sm">Reject</button>
+            </td>
+        </tr>
+        <tr>
+            <td>006</td>
+            <td>507</td>
+            <td>R600</td>
+            <td>Pre-approved</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>claim7.pdf</td>
+            <td>
+                <button class="btn btn-success btn-sm">Approve</button>
+                <button class="btn btn-danger btn-sm">Reject</button>
+            </td>
+        </tr>
+        <tr>
+            <td>007</td>
+            <td>508</td>
+            <td>R740</td>
+            <td>Pending</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>claim8.pdf</td>
+            <td>
+                <button class="btn btn-success btn-sm">Approve</button>
+                <button class="btn btn-danger btn-sm">Reject</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

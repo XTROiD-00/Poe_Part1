@@ -191,5 +191,10 @@ namespace Poe_Part1.Models
                 Console.WriteLine("Error updating claim status: " + ex.Message);
             }
         }
+
+        internal object get_all_claims()
+        {
+            throw new NotImplementedException();
+        }
     }
     }
