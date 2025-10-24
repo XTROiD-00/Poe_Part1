@@ -159,5 +159,37 @@ namespace Poe_Part1.Models
         {
             // Implement if you want to track logins; leave empty or remove for now
         }
+        public void store_claim(string facultyName, string moduleName, string sessions, int hours, decimal rate, string documentPath)
+        {
+            // Implement logic to store claim in the database.
+            // Example: Insert into Claims table (adjust as needed for your DB schema)
+            // This is a stub. Replace with actual database code.
+        }
+
+        public void update_claim_status(int claimId, string newStatus)
+        {
+            try
+            {
+                string connection_string = null;
+                using (SqlConnection connect = new SqlConnection(connection_string))
+                {
+                    connect.Open();
+                    string updateQuery = "UPDATE Claims SET STATUS = @Status WHERE ClaimId = @ClaimId";
+
+                    using (SqlCommand cmd = new SqlCommand(updateQuery, connect))
+                    {
+                        cmd.Parameters.AddWithValue("@Status", newStatus);
+                        cmd.Parameters.AddWithValue("@ClaimId", claimId);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    connect.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error updating claim status: " + ex.Message);
+            }
+        }
     }
-}
+    }

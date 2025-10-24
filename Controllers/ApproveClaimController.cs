@@ -1,60 +1,52 @@
-﻿/*using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Poe_Part1.Models;
 using System;
-using System.Collections.Generic;
 
-namespace Poe_Part1.Controllers
+public class ClaimsCApproontroller : Controller
 {
-    public class ApproveClaimController : Controller
-    {
-        private static List<ApproveClaim> claims = new List<ApproveClaim>
-        {
-            new ApproveClaim
-            {
-                ClaimId = 1,
-                ModuleId = "502",
-                Sessions = 3,
-                Hours = 15,
-                Rate = 150,
-                Status = "Pending",
-                SubmittedDate = DateTime.Parse("2025-09-01"),
-                SubmittedTime = "08:15",
-                Document = "claim1.pdf"
-            },
-            new ApproveClaim
-            {
-                ClaimId = 2,
-                ModuleId = "582",
-                Sessions = 2,
-                Hours = 12,
-                Rate = 200,
-                Status = "Pre-approved",
-                SubmittedDate = DateTime.Parse("2025-09-02"),
-                SubmittedTime = "10:00",
-                PreApprovedDate = DateTime.Parse("2025-09-03"),
-                PreApprovedTime = "09:45",
-                Document = "claim2.pdf"
-            },
-            new ApproveClaim
-            {
-                ClaimId = 3,
-                ModuleId = "590",
-                Sessions = 5,
-                Hours = 20,
-                Rate = 180,
-                Status = "Approved",
-                SubmittedDate = DateTime.Parse("2025-09-05"),
-                SubmittedTime = "11:30",
-                PreApprovedDate = DateTime.Parse("2025-09-06"),
-                PreApprovedTime = "14:10",
-                FinalizedDate = DateTime.Parse("2025-09-07"),
-                Document = "claim3.pdf"
-            }
-        };
+    all_queries _query = new all_queries();
 
-        public IActionResult ApproveClaimIndex()
-        {
-            return View(claims);
-        }
+    // ✅ Display all claims
+    [HttpGet]
+    public IActionResult MyClaims()
+    {
+        var claims = _query.get_all_claims();
+        return View(claims);
     }
-}*/
+
+    // ✅ Display single claim details
+    [HttpGet]
+    public IActionResult Details(int id)
+    {
+        var claims = _query.get_all_claims();
+        var claim = claims.Find(c => c.ClaimId == id);
+        if (claim == null)
+            return NotFound();
+
+        return View(claim);
+    }
+
+    // ✅ PC: Pre-Approve claim
+    public IActionResult PreApprove(int id)
+    {
+        _query.update_claim_status(id, "Pre-Approved");
+        TempData["SuccessMessage"] = "Claim pre-approved successfully.";
+        return RedirectToAction("MyClaims");
+    }
+
+    // ✅ PM: Approve claim
+    public IActionResult Approve(int id)
+    {
+        _query.update_claim_status(id, "Approved");
+        TempData["SuccessMessage"] = "Claim approved successfully.";
+        return RedirectToAction("MyClaims");
+    }
+
+    // ✅ PC or PM: Reject claim
+    public IActionResult Reject(int id)
+    {
+        _query.update_claim_status(id, "Rejected");
+        TempData["SuccessMessage"] = "Claim rejected.";
+        return RedirectToAction("MyClaims");
+    }
+}

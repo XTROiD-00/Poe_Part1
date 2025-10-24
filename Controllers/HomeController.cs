@@ -1,21 +1,25 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Poe_Part1.Models;
+using Poe_Part1.Data; // For accessing ApplicationDbContext
 
 namespace Poe_Part1.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
+            // Ensure tables are created
             var db = new all_queries();
             db.creates_table();
 
@@ -31,6 +35,7 @@ namespace Poe_Part1.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Register the user in the database
                 var db = new all_queries();
                 db.store_user(user.name, user.surname, user.email, user.password);
                 TempData["SuccessMessage"] = "Registration successful! Please login.";
@@ -52,57 +57,40 @@ namespace Poe_Part1.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Privacy(login user, string role)
+[HttpPost]
+public IActionResult Privacy(login user, string role)
+{
+    if (ModelState.IsValid)
+    {
+        var db = new all_queries();
+        bool found = db.search_user(user.name, user.surname, user.email, user.password);
+
+        if (found)
         {
-            if (ModelState.IsValid)
+            db.store_login(user.name, user.surname, user.email, user.password);
+            
+            // Store role for use in claims view
+            TempData["Role"] = role;
+            
+            return role switch
             {
-                var db = new all_queries();
-                bool found = db.search_user(user.name, user.surname, user.email, user.password);
-
-                if (found)
-                {
-                    db.store_login(user.name, user.surname, user.email, user.password);
-                    return role switch
-                    {
-                        "Lecturer" => RedirectToAction("Lecturer"),
-                        "Project Manager" => RedirectToAction("Project_Manager"),
-                        "Program coordinator" => RedirectToAction("Program_coordinator"),
-                        _ => RedirectToAction("Index")
-                    };
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Incorrect login credentials.");
-                }
-            }
-
-            return View(user);
+                "Lecturer" => RedirectToAction("Lecturer"),
+                "Project Manager" => RedirectToAction("Project_Manager"),
+                "Program coordinator" => RedirectToAction("Program_coordinator"),
+                _ => RedirectToAction("Index")
+            };
         }
+        else
+        {
+            ModelState.AddModelError("", "Incorrect login credentials.");
+        }
+    }
+    return View(user);
+}
 
         // Claims-related actions
 
-       /* [HttpGet]
-        public IActionResult Claim()
-        {
-            // Return the Claim View for users to submit a claim
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult SubmitClaim(string facultyName, string moduleName, int sessions, TimeSpan hours, decimal price)
-        {
-            if (ModelState.IsValid)
-            {
-                var claimsDb = new ClaimsQueries();
-                claimsDb.StoreClaim(facultyName, moduleName, sessions, hours, price);
-
-                TempData["ClaimMessage"] = "Claim submitted successfully!";
-                return RedirectToAction("Track_Claim");
-            }
-
-            return View("Claim");
-        } */
+        // Removed previous Claim-related action for cleaner routing
 
         [HttpGet]
         public IActionResult Track_Claim()
@@ -121,7 +109,6 @@ namespace Poe_Part1.Controllers
         public IActionResult Program_coordinator() => View();
         public IActionResult Pre_Approve() => View();
         public IActionResult ApproveClaimIndex() => View();
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

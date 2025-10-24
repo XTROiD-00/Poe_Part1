@@ -1,0 +1,84 @@
+﻿@model IEnumerable<POE_MVC_Part_1.Models.Claims>
+@{
+    ViewData["Title"] = "My Claims";
+    var role = ViewBag.Role?.ToString(); // Read role from controller
+}
+
+<h2>My Claims</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+@if (Model.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Month</th>
+                <th>Hours</th>
+                <th>Rate</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Document</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model)
+            {
+                <tr>
+                    <td>@claim.month</td>
+                    <td>@claim.hours</td>
+                    <td>@claim.rate</td>
+                    <td>@claim.totalAmount</td>
+                    <td>@claim.status</td>
+                    <td>
+                        <a href="~/uploads/@claim.documentName" target="_blank">View Document</a>
+                    </td>
+                    <td>
+                        @* LECTURER VIEW *@
+                        @if (role == "Lecturer")
+                        {
+                            <a asp-action="Details" asp-route-id="@claim.ClaimId" class="btn btn-sm btn-info">View</a>
+
+                            @if (claim.status != "Approved" && claim.status != "Rejected")
+                            {
+                                <a asp-action="Edit" asp-route-id="@claim.ClaimId" class="btn btn-sm btn-warning">Edit</a>
+                            }
+                        }
+                        @* PC VIEW *@
+                        else if (role == "PC")
+                        {
+                            <a asp-action="Details" asp-route-id="@claim.ClaimId" class="btn btn-sm btn-info">View</a>
+
+                            @if (claim.status == "Pending")
+                            {
+                                <a asp-action="PreApprove" asp-route-id="@claim.ClaimId" class="btn btn-sm btn-success">Pre-Approve</a>
+                                <a asp-action="Reject" asp-route-id="@claim.ClaimId" class="btn btn-sm btn-danger">Reject</a>
+                            }
+                        }
+                        @* PM VIEW *@
+                        else if (role == "PM")
+                        {
+                            <a asp-action="Details" asp-route-id="@claim.ClaimId" class="btn btn-sm btn-info">View</a>
+
+                            @if (claim.status == "Pre-Approved")
+                            {
+                                <a asp-action="Approve" asp-route-id="@claim.ClaimId" class="btn btn-sm btn-success">Approve</a>
+                                <a asp-action="Reject" asp-route-id="@claim.ClaimId" class="btn btn-sm btn-danger">Reject</a>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No claims found.</p>
+}
+
+<a href="/Account/@role" class="btn btn-secondary">Back to Dashboard</a>

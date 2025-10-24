@@ -1,19 +1,17 @@
-﻿using System.IO;
-using Microsoft.AspNetCore.Mvc;
-using Poe_Part1.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using Poe_Part1.Models;
-using System.Linq;
+using System.IO;
 
 namespace Poe_Part1.Controllers
 {
     public class ClaimController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        // Create an instance of ClaimsQueries for interacting with the database
+        private readonly ClaimsQueries _claimsDb;
 
-        // Constructor to inject the ApplicationDbContext
-        public ClaimController(ApplicationDbContext context)
+        public ClaimController()
         {
-            _context = context;
+            _claimsDb = new ClaimsQueries(); // Instantiate ClaimsQueries here
         }
 
         // GET action for submitting a claim
@@ -27,50 +25,84 @@ namespace Poe_Part1.Controllers
         [HttpPost]
         public IActionResult Submit(Claim claim)
         {
-            if (ModelState.IsValid)
+
+            Console.WriteLine(claim.ClaimId);
+
+            Console.WriteLine(claim.FacultyName);
+
+            Console.WriteLine(claim.ModuleName );
+
+            Console.WriteLine(claim.Sessions );
+
+            Console.WriteLine(claim.Hours );    
+
+            Console.WriteLine(claim.Rate );
+
+            Console.WriteLine(claim.TotalAmount );
+
+            Console.WriteLine(claim.DocumentPath );
+
+
+
+            if (!ModelState.IsValid)
             {
-                // Handle file upload
+                // Handle file upload if provided
                 if (Request.Form.Files.Count > 0)
                 {
                     var file = Request.Form.Files[0];
                     var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
 
-                    // Ensure the uploads folder exists
+                    // Ensure the uploads directory exists
                     if (!Directory.Exists(uploadsFolder))
                         Directory.CreateDirectory(uploadsFolder);
 
                     var filePath = Path.Combine(uploadsFolder, file.FileName);
-
-                    // Save the file to the uploads folder
                     using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
                         file.CopyTo(stream);
+                    }
 
-                    // Store the file path in the claim
-                    claim.DocumentPath = "/uploads/" + file.FileName;
+                    claim.DocumentPath = "/uploads/" + file.FileName; // Save document path in the claim object
                 }
 
-                // Add the claim to the database
-                _context.Claims.Add(claim);
-                _context.SaveChanges();
-                return RedirectToAction("Success");
+                // Calculate the total amount for the claim
+                claim.TotalAmount = claim.Sessions * claim.Hours * claim.Rate;
+
+                // Save the claim in the database using ClaimsQueries
+                _claimsDb.StoreClaim(claim);
+
+                // Redirect to Success action after successful submission
+                TempData["ClaimMessage"] = "Claim submitted successfully!";
+                return RedirectToAction("Submit");
+            }
+            else
+            {
+                Console.WriteLine("error");
+
             }
 
-            // If validation failed, re-render the form
+            // If validation fails, re-render the form with errors
             return View(claim);
         }
 
-        // Action to show success message
+        // Action to show success message after submitting a claim
         public IActionResult Success()
         {
-            return View();  // Create a Success.cshtml with a success message
+            return View();
         }
 
         // GET action for tracking claims
         [HttpGet]
         public IActionResult Track_Claim()
         {
-            var claims = _context.Claims.ToList();  // Fetch all claims from the database
-            return View(claims);  // Pass the claims data to the view
+            // Optionally, you can pass the success message after submission
+            if ("ClaimMessage" != null)
+            {
+                ViewBag.ClaimMessage = TempData["ClaimMessage"];
+            }
+
+            // Retrieve all claims (you may add a method for that in ClaimsQueries if needed)
+            return View(); // You can pass claims data to the view if needed
         }
     }
 }

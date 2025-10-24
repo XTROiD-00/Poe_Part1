@@ -7,7 +7,7 @@ namespace Poe_Part1.Models
     {
         private string connection = @"server=(localdb)\poe_part2;database=claim_stuff;";
 
-        // Method to create the claims table (adjusted for new schema)
+        // Create Claims table if it doesn't exist
         public void CreateClaimsTable()
         {
             try
@@ -17,15 +17,14 @@ namespace Poe_Part1.Models
                     connect.Open();
 
                     string query = @"
-                        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Claims' AND xtype='U')
                         CREATE TABLE Claims (
                             ClaimId INT IDENTITY(1,1) PRIMARY KEY,
-                            Faculty_name VARCHAR(225) NOT NULL,
-                            Module_name VARCHAR(225) NOT NULL,
-                            Sessions INT NOT NULL,
-                            Hours TIME NOT NULL,                             
-                            Price DECIMAL(10, 2) NOT NULL,                   
-                            TotalAmount AS (Sessions * CAST(DATEPART(HOUR, Hours) + DATEPART(MINUTE, Hours)/60.0 AS DECIMAL(10,2)) * Price) PERSISTED
+                            FacultyName VARCHAR(225) NOT NULL,
+                            ModuleName VARCHAR(225) NOT NULL,
+                            Sessions TIME NOT NULL,
+                            hours TIME NOT NULL,                             
+                            rate DECIMAL(10, 2) NOT NULL,                   
+                            TotalAmount AS (Sessions * CAST(DATEPART(HOUR, Hours), DATEPART(MINUTE, hours)/60.0 AS DECIMAL) * rate) 
                         )";
 
                     using (SqlCommand create = new SqlCommand(query, connect))
@@ -42,8 +41,8 @@ namespace Poe_Part1.Models
             }
         }
 
-        // Method to store a claim in the database
-        public void StoreClaim(string facultyName, string moduleName, int sessions, TimeSpan hours, decimal price)
+        // Store Claim in database
+        public void StoreClaim(Claim claim)
         {
             try
             {
@@ -52,20 +51,20 @@ namespace Poe_Part1.Models
                     connect.Open();
 
                     // Trim inputs to avoid storing accidental spaces
-                    facultyName = facultyName.Trim();
-                    moduleName = moduleName.Trim();
+                    claim.FacultyName = claim.FacultyName.Trim();
+                    claim.ModuleName = claim.ModuleName.Trim();
 
                     string query = @"
-                        INSERT INTO Claims (Faculty_name, Module_name, Sessions, Hours, Price)
-                        VALUES (@facultyName, @moduleName, @sessions, @hours, @price)";
+                        INSERT INTO Claims (FacultyName, ModuleName, Sessions, Hours, rate)
+                        VALUES (@FacultyName, @ModuleName, @Sessions, @Hours, @rate)";
 
                     using (SqlCommand insert = new SqlCommand(query, connect))
                     {
-                        insert.Parameters.AddWithValue("@facultyName", facultyName);
-                        insert.Parameters.AddWithValue("@moduleName", moduleName);
-                        insert.Parameters.AddWithValue("@sessions", sessions);
-                        insert.Parameters.AddWithValue("@hours", hours);
-                        insert.Parameters.AddWithValue("@price", price);
+                        insert.Parameters.AddWithValue("@FacultyName", claim.FacultyName);
+                        insert.Parameters.AddWithValue("@ModuleName", claim.ModuleName);
+                        insert.Parameters.AddWithValue("@Sessions", claim.Sessions);
+                        insert.Parameters.AddWithValue("@hours", claim.Hours);
+                        insert.Parameters.AddWithValue("@rate", claim.Rate);
 
                         insert.ExecuteNonQuery();
                     }
@@ -79,8 +78,8 @@ namespace Poe_Part1.Models
             }
         }
 
-        // Method to search for a claim (if needed, adjust for claims-specific searches)
-        public bool SearchClaim(string facultyName, string moduleName, int sessions, TimeSpan hours)
+        // Search for claim in the database
+        public bool SearchClaim(string FacultyName, string ModuleName, int Sessions, int hours)
         {
             bool found = false;
 
@@ -90,21 +89,21 @@ namespace Poe_Part1.Models
                 {
                     connect.Open();
 
-                    facultyName = facultyName.Trim();
-                    moduleName = moduleName.Trim();
+                    FacultyName = FacultyName.Trim();
+                    ModuleName = ModuleName.Trim();
 
                     string query = @"
                         SELECT * FROM Claims
-                        WHERE LOWER(Faculty_name) = LOWER(@facultyName)
-                        AND LOWER(Module_name) = LOWER(@moduleName)
-                        AND Sessions = @sessions
-                        AND Hours = @hours";
+                        WHERE LOWER(FacultyName) = LOWER(@FacultyName)
+                        AND LOWER(ModuleName) = LOWER(@ModuleName)
+                        AND Sessions = @Sessions
+                        AND hours = @Hours";
 
                     using (SqlCommand command = new SqlCommand(query, connect))
                     {
-                        command.Parameters.AddWithValue("@facultyName", facultyName);
-                        command.Parameters.AddWithValue("@moduleName", moduleName);
-                        command.Parameters.AddWithValue("@sessions", sessions);
+                        command.Parameters.AddWithValue("@FacultyName", FacultyName);
+                        command.Parameters.AddWithValue("@ModuleName", ModuleName);
+                        command.Parameters.AddWithValue("@Sessions", Sessions);
                         command.Parameters.AddWithValue("@hours", hours);
 
                         using (SqlDataReader reader = command.ExecuteReader())
@@ -125,6 +124,44 @@ namespace Poe_Part1.Models
             }
 
             return found;
+        }
+
+        public List<Claim> GetAllClaims()
+        {
+            var claims = new List<Claim>();
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(connection))
+                {
+                    connect.Open();
+                    string query = "SELECT * FROM Claims ORDER BY ClaimId DESC";
+
+                    using (SqlCommand cmd = new SqlCommand(query, connect))
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            claims.Add(new Claim
+                            {
+                                ClaimId = Convert.ToInt32(reader["ClaimId"]),
+                                FacultyName = reader["FacultyName"]?.ToString() ?? "",
+                                ModuleName = reader["ModuleName"]?.ToString() ?? "",
+                                Sessions = Convert.ToInt32(reader["Sessions"]),
+                                Hours = Convert.ToInt32(reader["Hours"]),
+                                Rate = Convert.ToDecimal(reader["Rate"]),
+                                TotalAmount = Convert.ToDecimal(reader["TotalAmount"]),
+                                Status = reader["Status"]?.ToString() ?? "Pending",
+                                DocumentPath = reader["DocumentPath"]?.ToString()
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting claims: " + ex.Message);
+            }
+            return claims;
         }
     }
 }
